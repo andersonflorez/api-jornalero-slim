@@ -1,4 +1,7 @@
 <?php
+
+use Src\Libs\DataBase;
+
 // DIC configuration
 
 $container = $app->getContainer();
@@ -17,3 +20,12 @@ $container['logger'] = function ($c) {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
     return $logger;
 };
+
+$container['database'] = function($c){
+  $stringConection = $c->get('settings')['stringConection'];
+  return DataBase::getInstance($stringConection);
+};
+
+$container['stringConection'] = function($c){
+  return $c->get('settings')['stringConection'];
+}

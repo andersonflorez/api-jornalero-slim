@@ -11,7 +11,7 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-session_start();
+date_default_timezone_set("America/Bogota");
 
 // Instantiate the app
 $settings = require __DIR__ . '/../src/settings.php';
@@ -20,11 +20,8 @@ $app = new \Slim\App($settings);
 // Set up dependencies
 require __DIR__ . '/../src/dependencies.php';
 
-// Register middleware
-require __DIR__ . '/../src/middleware.php';
-
-// Register routes
-require __DIR__ . '/../src/routes.php';
+// Set up loader
+require __DIR__ . '/../src/loader.php';
 
 // Run app
 $app->run();
