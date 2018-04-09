@@ -28,4 +28,4 @@ $container['database'] = function($c){
 
 $container['stringConection'] = function($c){
   return $c->get('settings')['stringConection'];
-}
+};

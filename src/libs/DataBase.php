@@ -25,13 +25,13 @@ class DataBase{
   }
 
   private function __clone(){
-    
+
   }
 
   public static function getInstance($stringConection){
     //aplicamos el factor Singleton
 
-    if (!(self::$instances instaceof self)) {
+    if (!(self::$instances instanceof self)) {
       self::$instances = new self($stringConection);
     }
     return self::$instances;

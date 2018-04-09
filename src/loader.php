@@ -7,8 +7,8 @@ $folders = [
   'models',
   'controllers/v1',
   'middleware',
-  'routes'
-  'validation',
+  'routes',
+  'validation'
 ];
 
 foreach ($folders as $folder) {
