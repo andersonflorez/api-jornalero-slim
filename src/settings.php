@@ -18,7 +18,7 @@ return [
         'stringConection' => [
           'dns' => 'mysql:host=127.0.0.1;dbname=dbjornaleros;charset=utf8',
           'user' => 'root',
-          'password' => '' 
+          'password' => '1234'
         ]
     ],
 ];

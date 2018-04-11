@@ -4,7 +4,7 @@ $base = __DIR__ . '/../src/';
 
 $folders = [
   'libs',
-  'models',
+  'models/v1',
   'controllers/v1',
   'middleware',
   'routes',
