@@ -5,10 +5,10 @@ $base = __DIR__ . '/../src/';
 $folders = [
   'libs',
   'models/v1',
+  'validations/v1',
   'controllers/v1',
   'middleware',
-  'routes',
-  'validation'
+  'routes'
 ];
 
 foreach ($folders as $folder) {

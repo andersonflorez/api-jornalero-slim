@@ -2,7 +2,7 @@
 
 namespace Src\Controllers\v1;
 
-use Src\Models\V1\JornaleroModel, Slim\Http\Request, Slim\Http\Response, Src\Libs\UtilResponse, Exception;
+use Src\Models\V1\JornaleroModel, Slim\Http\Request, Slim\Http\Response, Src\Libs\UtilResponse, Exception, Src\Validations\v1\JornaleroValidation;
 
 class JornaleroController{
   private $app = null;
@@ -29,7 +29,7 @@ class JornaleroController{
 
   }
 
-  public function getInstance($app){
+  public static function getInstance($app){
     if(!(self::$instance instanceof self)){
       self::$instance = new self($app);
     }
@@ -38,18 +38,40 @@ class JornaleroController{
 
   public function createJornalero(Request $request, Response $response, array $args){
 
-    $this->jornaleroModel->createJornalero($request->getParsedBody());
-
     $this->utilResponse = new UtilResponse();
-    $this->utilResponse = $this->utilResponse->setResponse(true, 'El Jornalero se inserto correctamente');
-    return $response->withJson($this->utilResponse, 201);
+    $data = $request->getParsedBody();
 
+    $validation = JornaleroValidation::validate($data);
+
+    if(!$validation->result){
+      return $response->withJson($validation,422);
+    }
+    try{
+      
+      $idJornalero = $this->jornaleroModel->createJornalero($data);
+      $this->utilResponse = $this->utilResponse->setResponse(true, 'El Jornalero se inserto correctamente');
+      $data = $this->jornaleroModel->readJornalero($idJornalero);
+      $this->utilResponse->object = $data;
+      return $response->withJson($this->utilResponse, 201);
+
+    }catch(Exception $e){
+      $this->app->logger->error("Jornalero App - Ruta: POST v1/Jornaleros Controlador: JornaleroController:createJornalero. Error: ".$e->getMessage());
+      $this->utilResponse = $this->utilResponse->setResponse(false, 'Ocurrio un error inesperado');
+      return $response->withJson($this->utilResponse, 500);
+    }
   }
 
-  public function readJornaleros(Request $request, Response $response, array $args){
+  public function readJornaleros(Request $request, Response $response){
     $this->utilResponse = new UtilResponse();
-    $this->utilResponse->object = $this->jornaleroModel->readJornaleros();
-    return $response->withJson($this->utilResponse, 200);
+    try{
+      $this->utilResponse->object = $this->jornaleroModel->readJornaleros();
+      $this->utilResponse = $this->utilResponse->setResponse(true, 'El Jornalero se listaron con exito');
+      return $response->withJson($this->utilResponse, 200);
+    }catch(Exception $e){
+      $this->app->logger->error("Jornalero App - Ruta: GET v1/Jornaleros Controlador: JornaleroController:readJornaleros. Error: ".$e->getMessage());
+      $this->utilResponse = $this->utilResponse->setResponse(false, 'Ocurrio un error inesperado');
+      return $response->withJson($this->utilResponse, 500);
+    }
   }
 
   public function readJornalero(Request $request, Response $response, array $args){
